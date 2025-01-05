@@ -1,18 +1,19 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
+from typing import List
 from app.database.connection import get_db 
 from app.schemas.item import Item as item_schema, ItemCreate
 from app.models.item import Item as item_model
 from app.services.item_service import get_items, get_item, create_item, delete_item
 
 item_router = APIRouter(
-    prefix="/items",
-    tags="items"
+    prefix="/Items",
+    tags=["Items"]
 )
 
-@item_router.get("/", response_model=list[item_schema])
+@item_router.get("/", response_model=List[item_schema])
 def show_it(db: Session = Depends(get_db)):
-    items = get_items(db)
+    return get_items(db)
 
 @item_router.post("/", response_model=item_schema)
 def create_it(item: ItemCreate, db: Session = Depends(get_db)):
